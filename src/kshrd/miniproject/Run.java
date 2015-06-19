@@ -12,7 +12,16 @@ public class Run {
 	public static ArrayList<Article> article;
 	//private LinkedList<Article> bookTmp;
 	private Pagination pagination;
+	private int column;
 	
+	public int getColumn() {
+		return column;
+	}
+
+	public void setColumn(int column) {
+		this.column = column;
+	}
+
 	/**
 	 * main method
 	 * @param args
@@ -37,9 +46,9 @@ public class Run {
 //		System.out.println(FileMethod.readDataFromFile());
 //		System.out.println(Run.article.get(0).toString());
 		pagination = new Pagination(article, 5);
-		Display.showWelcome();
+		setColumn(4);
 		while(IO.start) {
-			pagination.displayAllRecord(3);
+			pagination.displayAllRecord(getColumn());
 			choice();
 		}
 	}
@@ -99,7 +108,7 @@ public class Run {
 			getPagination().moveFirst();
 			break;
 		case 'c':
-			
+			setColumn(IO.readInt("Set Column: ",2,4));
 			break;
 		case '0':
 			IO.start = false;
@@ -114,20 +123,13 @@ public class Run {
 	 * @throws IOException 
 	 */
 	public void addToArticle(int numberOfArticle) {
-//		String data = "";
-		ArrayList<Article> tmp = new ArrayList<Article>();
-		for(int i=0;i<numberOfArticle;i++) {
-//			data += new Article(i+1).toString();
-			tmp.add(new Article(i+1));
-//			FileMethod.writeDataIntoFile(new Article(i+1).toString());
-		}
-//		try {
-//			FileMethod.out.close();
-//		}	catch(IOException e) {
-//			e.printStackTrace();
+//		ArrayList<Article> tmp = new ArrayList<Article>();
+//		for(int i=0;i<numberOfArticle;i++) {
+////			data += new Article(i+1).toString();
+//			tmp.add(new Article(i+1));
+////			FileMethod.writeDataIntoFile(new Article(i+1).toString());
 //		}
-//		Run.article = FileMethod.fileToArrayList();
-		FileMethod.writeDataIntoFile(tmp);
+//		FileMethod.writeDataIntoFile(tmp);
 		Run.article = FileMethod.readDataFromFile();
 	}
 
