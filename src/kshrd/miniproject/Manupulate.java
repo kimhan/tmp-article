@@ -8,9 +8,7 @@ import kshrd.raw.Display;
 import kshrd.raw.IO;
 
 public class Manupulate {
-	
-	static Pagination p;
-	
+
 	/**
 	 * read a record from arraylist according to the read id
 	 * the id should be relevance to the one in the array
@@ -153,9 +151,9 @@ public class Manupulate {
 	 */
 	public static void mySearch(String stringSearch) {
 		ArrayList<Article> arr = searchByString(stringSearch); 
-		p = new Pagination(arr, 5);
+		Run.pagination = new Pagination(arr, 5);
 		while(IO.start) {
-			p.displayAllRecord(arr, 4);
+			Run.pagination.displayAllRecord(arr, 4);
 			Display.showMenu("<<< Menu >>>", "0:exit search", "| 1:Mover First | 2:Move Next | 3:Move Previous | 4:Move Last |");
 			int key = IO.readInt("Make your choice: ");
 			switch (key) {
@@ -184,6 +182,7 @@ public class Manupulate {
 	public static void search() {
 		ArrayList<Article> arr = new ArrayList<Article>();
 		Article a;
+		boolean stop=false;
 		String search = "";
 		switch(IO.readInt("1. Search by title, 2. by Author ", 1, 2)) {
 			case 1:
@@ -195,8 +194,6 @@ public class Manupulate {
 				}
 				if(arr.size() < 0) 
 					IO.println("Not found !!!");
-				else 
-					Pagination.displayAllRecord(arr, 4); 
 				break;
 			case 2:
 				search = IO.readString("Search Author: ");
@@ -207,11 +204,53 @@ public class Manupulate {
 				}
 				if(arr.size() < 0) 
 					IO.println("Not found !!!");
-				else 
-					Pagination.displayAllRecord(arr, 4); 
 				break;
 		}
-		IO.pressEnterContinue();
+		while(stop) {
+			Run.article = arr;
+			Run.pagination.displayAllRecord(Run.column);
+			choice(stop);
+		}
+	}
+	
+	public static void choice(boolean stop) {
+		Display.showMenu("<<< Menu >>>", "1:Mover First | 2:Move Next | 3:Move Previous | 4:Move Last", "5:update | 6:delete | G:go to | p:set page | c: set Cols | 0: Back");
+		int key = IO.readChar("Make your choice: ");
+		switch (key) {
+		case '1':
+			Run.pagination.moveFirst();
+			break;
+		case '2':
+			Run.pagination.moveNext();
+			break;
+		case '3':
+			Run.pagination.movePrevious();
+			break;
+		case '4':
+			Run.pagination.moveLast(); 
+			break;
+		case '5':
+			Manupulate.performUpdate(); 
+			Run.pagination.moveFirst();
+			break;
+		case '6':
+			Manupulate.performDelete(); 
+			break;
+		case 'G': case 'g':
+			Run.pagination.numberRecord(IO.readInt("Go to page: ", 0, Run.pagination.getTotalPage()));
+			break;
+		case 'p':
+			Run.pagination.setRecordPerPage(IO.readInt("Number of Record per page: "));
+			Run.pagination.moveFirst();
+			break;
+		case 'c':
+			Run.column = IO.readInt("Set Column: ",2,4);
+			break;
+		case '0':
+			stop = true;
+			break;
+		}
+		
 	}
 	
 	/**

@@ -11,15 +11,11 @@ public class Run {
 
 	public static ArrayList<Article> article;
 	//private LinkedList<Article> bookTmp;
-	private Pagination pagination;
-	private int column;
+	static Pagination pagination;
+	static int column;
 	
 	public int getColumn() {
 		return column;
-	}
-
-	public void setColumn(int column) {
-		this.column = column;
 	}
 
 	/**
@@ -46,9 +42,9 @@ public class Run {
 //		System.out.println(FileMethod.readDataFromFile());
 //		System.out.println(Run.article.get(0).toString());
 		pagination = new Pagination(article, 5);
-		setColumn(4);
+		column = 4;
 		while(IO.start) {
-			pagination.displayAllRecord(getColumn());
+			pagination.displayAllRecord(column);
 			choice();
 		}
 	}
@@ -108,7 +104,7 @@ public class Run {
 			getPagination().moveFirst();
 			break;
 		case 'c':
-			setColumn(IO.readInt("Set Column: ",2,4));
+			column = IO.readInt("Set Column: ",2,4);
 			break;
 		case '0':
 			IO.start = false;
