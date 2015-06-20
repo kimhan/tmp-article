@@ -116,8 +116,13 @@ public class FileMethod {
 		}
 	}
 
-	public static void main(String[] args) {
-		System.out.println(fileName);
+	public static void writeDataIntoFile(Article tmp) {
+		try {
+			out = new ObjectOutputStream(new FileOutputStream(fileName, true));
+			out.writeObject(tmp);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 }

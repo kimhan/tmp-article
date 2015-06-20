@@ -45,6 +45,10 @@ public class IO {
 		return Integer.parseInt(readString(message));
 	}
 	
+	public static long readLong(String message) { 
+		return Long.parseLong(message);
+	}
+	
 	/**
 	 * use to read integer from keyborad in [min , max]
 	 * @param message : display message

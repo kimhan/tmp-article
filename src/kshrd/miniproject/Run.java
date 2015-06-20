@@ -26,7 +26,8 @@ public class Run {
 	 */
 	Run() {
 		article = new ArrayList<Article>();
-		addToArticle(10002);
+//		addToArticle(10002);
+		Run.article = FileMethod.readDataFromFile();
 		pagination = new Pagination(article, 5);
 		col = 4;
 //		Display.showWelcome();
@@ -81,7 +82,7 @@ public class Run {
 			Manupulate.search();
 			break;
 		case '8':
-			Manupulate.performUpdate(); 
+			Manupulate.performUpdate(article); 
 			pagination.moveFirst(article);
 			break;
 		case '9':
@@ -109,12 +110,12 @@ public class Run {
 	 * @param numberOfArticle : number of article contain in array
 	 */
 	public void addToArticle(int numberOfArticle) {
-//		ArrayList<Article> tmp = new ArrayList<Article>();
-//		for(int i=0;i<numberOfArticle;i++) {
-//			tmp.add(new Article(i+1));
-////			FileMethod.writeDataIntoFile(new Article(i+1).toString());
-//		}
-//		FileMethod.writeDataIntoFile(tmp);
+		ArrayList<Article> tmp = new ArrayList<Article>();
+		for(int i=0;i<numberOfArticle;i++) {
+			tmp.add(new Article(i+1));
+//			FileMethod.writeDataIntoFile(new Article(i+1).toString());
+		}
+		FileMethod.writeDataIntoFile(tmp);
 		Run.article = FileMethod.readDataFromFile();
 		System.out.println(Run.article.size()+"\n"+Run.article.get(0).toString());
 	}

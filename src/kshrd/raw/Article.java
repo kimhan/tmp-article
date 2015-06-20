@@ -4,7 +4,7 @@ import java.io.Serializable;
 
 @SuppressWarnings("serial")
 public class Article implements Serializable, Comparable<Article> {
-	private int id;  
+	private long id;  
 	private String title;
 	private String author;
 	private String date;
@@ -14,23 +14,23 @@ public class Article implements Serializable, Comparable<Article> {
 		this(0,"Noname","Other");
 	}
 	
-	public Article(int id) {
+	public Article(long id) {
 		this(id, "Noname", "NoAuthor");
 	}
 	
-	public Article(int id,String title, String author) {
+	public Article(long id,String title, String author) {
 		setId(id);
 		setTitle(title);
 		setAuthor(author);
 		setDate(IO.getDate());
 	}
 	
-	public Article(int id, String title, String author, String content) {
+	public Article(long id, String title, String author, String content) {
 		this(id,title,author);
 		setDetail(content); 
 	}
 	
-	public Article(int id, String title, String author, String date, String content) {
+	public Article(long id, String title, String author, String date, String content) {
 		this(id, title, author, content);
 		setDate(date);
 	}
@@ -92,11 +92,11 @@ public class Article implements Serializable, Comparable<Article> {
 		return getId() + "|" + getTitle() + "|" + getAuthor() + "|" + getDate() + "|" + getDetail() + ";\n";
 	}
 
-	public int getId() {
+	public long getId() {
 		return id;
 	} 
 
-	public void setId(int id) {
+	public void setId(long id) {
 		this.id = id;
 	}
 
