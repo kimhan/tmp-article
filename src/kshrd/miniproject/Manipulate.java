@@ -2,11 +2,9 @@ package kshrd.miniproject;
 
 import java.util.*;
 
-import kshrd.raw.Article;
-import kshrd.raw.Display;
-import kshrd.raw.IO;
+import kshrd.raw.*;
 
-public class Manupulate {
+public class Manipulate {
 
 	/**
 	 * tmpSearch : use to store temporary record after searching
@@ -20,8 +18,8 @@ public class Manupulate {
 	 * will be shown.
 	 */
 	public static void performRead() {
-		int search = Manupulate.searchById(IO.readInt("Read ID: "));
-		if (Manupulate.isExist(search)) {
+		int search = Manipulate.searchById(IO.readInt("Read ID: "));
+		if (Manipulate.isExist(search)) {
 			Article a = Run.article.get(search);
 			IO.println("ID: " + a.getId());
 			IO.println("Title: " + a.getTitle());
@@ -69,27 +67,37 @@ public class Manupulate {
 	 * delete one record from the file the execution can be perform unless the
 	 * provided id is valid and y is pressed
 	 */
-	public static void performDelete() {
-		int search = Manupulate.searchById(IO.readInt("Delete ID: "));
-		if (!Manupulate.isExist(search))
+	public static void performDelete(ArrayList<Article> tmp, boolean optional) {
+		int search = Manipulate.searchById(IO.readInt("Delete ID: "));
+		if (!Manipulate.isExist(search))
 			IO.println("No record with this id " + search + "!!!");
 		else {
-			if (IO.readChar("'y' to delete: ") == 'y')
-				Run.article.set(search, null);
+			if (IO.readChar("'y' to delete: ") == 'y') {
+				tmp.get(search).setTitle("deleted");
+				tmp.get(search).setAuthor("deleted");
+				tmp.get(search).setDate("deleted");
+				tmp.get(search).setDetail("deleted");
+			}
 		}
-		IO.pressEnterContinue();
+		if(optional) {
+			Run.article.get(search).setTitle("deleted");
+			Run.article.get(search).setAuthor("deleted");
+			Run.article.get(search).setDate("deleted");
+			Run.article.get(search).setDetail("deleted");
+		}
+		FileMethod.writeDataIntoFile(tmp);
 	}
 
 	/**
 	 * update a record by provided valid id there are three kind of updation: 1>
 	 * update title 2> update author 3> update content
 	 */
-	public static void performUpdate(ArrayList<Article> tmp) {
-		int search = Manupulate.searchById(tmp, IO.readInt("Update ID: "));
-		if (!Manupulate.isExist(search)) 
+	public static void performUpdate(ArrayList<Article> tmp, boolean optional) {
+		int search = Manipulate.searchById(tmp, IO.readInt("Update ID: "));
+		if (!Manipulate.isExist(search)) 
 			IO.println("No record with this id !!!");
 		else {
-			Article a = Run.article.get(search);
+			Article a = tmp.get(search);
 			switch (IO.readInt("1. titel, 2. author, 3. content ", 1, 3)) {
 			case 1:
 				a.setTitle(IO.readString("new title: "));
@@ -101,11 +109,11 @@ public class Manupulate {
 				a.setDetail(IO.readString("new content: "));
 				break;
 			}
-			Run.article.set(search, a);
+			tmp.set(search, a);
+			if(optional)
+				Run.article.set(search, a);
 			FileMethod.writeDataIntoFile(Run.article);
-			IO.println("Successfully added my friend !!!");
 		}
-		IO.pressEnterContinue();
 	}
 
 	/**
@@ -180,7 +188,7 @@ public class Manupulate {
 			IO.pressEnterContinue();
 		} else {
 			while (IO.start) {
-				Run.pagination.displayAllRecord(tmpSearch);
+				Pagination.displayAllRecord(tmpSearch);
 				choice();
 			}
 			IO.start = true;
@@ -251,34 +259,37 @@ public class Manupulate {
 		int key = IO.readChar("Make your choice: ");
 		switch (key) {
 		case '1':
-			Run.pagination.moveFirst(tmpSearch);
+			Pagination.moveFirst(tmpSearch);
 			break;
 		case '2':
-			Run.pagination.moveNext(tmpSearch);
+			Pagination.moveNext(tmpSearch);
 			break;
 		case '3':
-			Run.pagination.movePrevious(tmpSearch);
+			Pagination.movePrevious(tmpSearch);
 			break;
 		case '4':
-			Run.pagination.moveLast(tmpSearch);
+			Pagination.moveLast(tmpSearch);
 			break;
 		case '5':
-			Manupulate.performUpdate(tmpSearch);
-			Run.pagination.moveFirst(tmpSearch);
+			Manipulate.performUpdate(tmpSearch, true);
+			IO.println("Successfully updated my friend !!!");
+			IO.pressEnterContinue();
+			//Pagination.moveFirst(tmpSearch);
 			break;
 		case '6':
-			Manupulate.performDelete();
+			Manipulate.performDelete(tmpSearch, true);
+			IO.println("Congratulation, Record reset successfully !!!");
+			IO.pressEnterContinue();
 			break;
 		case 'G':
 		case 'g':
-			Run.pagination.numberRecord(IO.readInt("Go to page: ", 0,
-					Run.pagination.getTotalPage()), tmpSearch);
+			Pagination.numberRecord(IO.readInt("Go to page: ", 0,
+					Pagination.getTotalPage()), tmpSearch);
 			break;
 		case 'r':
 		case 'R':
-			Run.pagination.setRecordPerPage(IO
-					.readInt("Number of Record per page: "));
-			Run.pagination.moveFirst(tmpSearch);
+			Pagination.recordPerPage = IO.readInt("Number of Record per page: ");
+			Pagination.moveFirst(tmpSearch);
 			break;
 		case 'c':
 		case 'C':

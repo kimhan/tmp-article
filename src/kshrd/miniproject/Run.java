@@ -1,20 +1,17 @@
 package kshrd.miniproject;
 
-import java.util.ArrayList;
+import java.util.*;
 
-import kshrd.raw.Article;
-import kshrd.raw.Display;
-import kshrd.raw.IO;
+import kshrd.raw.*;
 
 public class Run {
 
 	/**
 	 * article : array store all record after reading from a file
-	 * pagination : display record in page according to number of record and max row per page
+	 * Pagination : display record in page according to number of record and max row per page
 	 * columnPerPage : display column per page
 	 */
 	public static ArrayList<Article> article;
-	static Pagination pagination;
 	static int columnPerPage;
 	
 	/**
@@ -28,15 +25,26 @@ public class Run {
 	/**
 	 * constructor
 	 * initialize array list to store all record from file
-	 * initialize pagination for display all record depending on array and max row per page
+	 * initialize Pagination for display all record depending on array and max row per page
 	 * initialize number of column
 	 * start switch case
 	 */
+	@SuppressWarnings("static-access")
 	Run() {
 		article = new ArrayList<Article>();
-//		addToArticle(10002);
-		Run.article = FileMethod.readDataFromFile();
-		pagination = new Pagination(article, 5);
+		String []load = {"L", "O", "A", "D", "I", "N", "G"};
+		try {
+			addToArticle(100002);
+			FileMethod.readDataFromFile();
+			IO.print(Display.whiteSpace(45) + "+ ");
+			for(int i=0;i<load.length;i++) {
+				IO.print(load[i]+"");
+				Thread.currentThread().sleep(500);
+			}
+			IO.println(" +");
+        } catch(Exception e) {
+        	e.printStackTrace();
+        }
 		columnPerPage = 4;
 		myChoice();
 	}
@@ -46,7 +54,7 @@ public class Run {
 	 */
 	public static void myChoice() {
 		while(IO.start) {
-			pagination.displayAllRecord(article);
+			Pagination.displayAllRecord(article);
 			choice();
 		}
 	}
@@ -71,39 +79,43 @@ public class Run {
 		int key = IO.readChar("Make your choice: ");
 		switch (key) {
 		case '1':
-			pagination.moveFirst(article);
+			Pagination.moveFirst(article);
 			break;
 		case '2':
-			pagination.moveNext(article);
+			Pagination.moveNext(article);
 			break;
 		case '3':
-			pagination.movePrevious(article);
+			Pagination.movePrevious(article);
 			break;
 		case '4':
-			pagination.moveLast(article); 
+			Pagination.moveLast(article); 
 			break;
 		case '5':
-			Manupulate.performRead();
+			Manipulate.performRead();
 			break;
 		case '6':
-			Manupulate.performWrite();
+			Manipulate.performWrite();
 			break;
 		case '7':
-			Manupulate.search();
+			Manipulate.search();
 			break;
 		case '8':
-			Manupulate.performUpdate(article); 
-			pagination.moveFirst(article);
+			Manipulate.performUpdate(article, false);
+			IO.println("Successfully updated my friend !!!");
+			IO.pressEnterContinue();
+			//Pagination.moveFirst(article);
 			break;
 		case '9':
-			Manupulate.performDelete(); 
+			Manipulate.performDelete(article, false); 
+			IO.println("Congratulation, Record reset successfully !!!");
+			IO.pressEnterContinue();
 			break;
 		case 'G': case 'g':
-			pagination.numberRecord(IO.readInt("Go to page: ", 0, pagination.getTotalPage()), article);
+			Pagination.numberRecord(IO.readInt("Go to page: ", 0, Pagination.getTotalPage()), article);
 			break;
 		case 'r': case 'R':
-			pagination.setRecordPerPage(IO.readInt("Number of Record per page: "));
-			pagination.moveFirst(article);
+			Pagination.recordPerPage = IO.readInt("Number of Record per page: ");
+			Pagination.moveFirst(article);
 			break;
 		case 'c': case 'C':
 			columnPerPage = IO.readInt("set Colum[2, 4]: ", 2, 4);
@@ -112,7 +124,6 @@ public class Run {
 			IO.start = false;
 			break;
 		}
-		
 	}
 	
 	/**
@@ -122,10 +133,9 @@ public class Run {
 	public void addToArticle(int numberOfArticle) {
 		ArrayList<Article> tmp = new ArrayList<Article>();
 		for(int i=0;i<numberOfArticle;i++) {
-			tmp.add(new Article(i+1));
+			tmp.add(tmp.size(), new Article(i+1));
 		}
 		FileMethod.writeDataIntoFile(tmp);
-
 	}
 	
 }

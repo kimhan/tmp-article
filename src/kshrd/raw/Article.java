@@ -164,71 +164,71 @@ public class Article implements Serializable, Comparable<Article> {
 	}
 
 	/**
-	 * 
-	 * @return
+	 * get title value
+	 * @return title value
 	 */
 	public String getTitle() {
 		return title;
 	}
 
 	/**
-	 * 
-	 * @param title
+	 * set new title value
+	 * @param title : new title
 	 */
 	public void setTitle(String title) {
 		this.title = title;
 	}
  
 	/**
-	 * 
-	 * @return
+	 * get old author value
+	 * @return author value
 	 */
 	public String getAuthor() {
 		return author;
 	}
 
 	/**
-	 * 
-	 * @param author
+	 * set new author value
+	 * @param author : new author value
 	 */
 	public void setAuthor(String author) {
 		this.author = author;
 	}
 
 	/**
-	 * 
-	 * @return
+	 * get old date value
+	 * @return date value
 	 */
 	public String getDate() {
 		return date;
 	}
 	
 	/**
-	 * 
-	 * @param date
+	 * set new date value
+	 * @param date : new date value
 	 */
 	public void setDate(String date) {
 		this.date = date;
 	}
 
 	/**
-	 * 
-	 * @return
+	 * get old content value
+	 * @return content value
 	 */
 	public String getDetail() {
 		return detail;
 	}
 
 	/**
-	 * 
-	 * @param detail
+	 * set new content value
+	 * @param detail : new content value
 	 */
 	public void setDetail(String detail) {
 		this.detail = detail;
 	}
 
 	/**
-	 * 
+	 * compare id for arrays.sort()
 	 */
 	@Override
 	public int compareTo(Article o) {

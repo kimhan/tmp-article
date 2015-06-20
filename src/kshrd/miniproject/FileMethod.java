@@ -3,7 +3,7 @@ package kshrd.miniproject;
 import java.io.*;
 import java.util.*;
 
-import kshrd.raw.Article;
+import kshrd.raw.*;
 
 public class FileMethod {
 
@@ -33,18 +33,16 @@ public class FileMethod {
 	 * @return all the data that is read from the specific fileName member above
 	 */
 	@SuppressWarnings("unchecked")
-	public static ArrayList<Article> readDataFromFile() {
-		ArrayList<Article> tmp = new ArrayList<Article>();
+	public static void readDataFromFile() {
 		try {
 			in = new ObjectInputStream(new FileInputStream(fileName));
-			tmp = (ArrayList<Article>) in.readObject();
+			Run.article = (ArrayList<Article>)in.readObject();
 			in.close();
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		return tmp;
 	}
 
 	/**
@@ -56,6 +54,7 @@ public class FileMethod {
 		try {
 			out = new ObjectOutputStream(new FileOutputStream(fileName));
 			out.writeObject(tmp);
+			out.close();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -70,6 +69,7 @@ public class FileMethod {
 		try {
 			out = new ObjectOutputStream(new FileOutputStream(fileName, true));
 			out.writeObject(tmp);
+			out.close();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

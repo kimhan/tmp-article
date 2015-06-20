@@ -1,10 +1,8 @@
 package kshrd.miniproject;
 
-import java.util.ArrayList;
+import java.util.*;
 
-import kshrd.raw.Article;
-import kshrd.raw.Display;
-import kshrd.raw.IO;
+import kshrd.raw.*;
 
 public class Pagination {
 	
@@ -14,53 +12,41 @@ public class Pagination {
 	 * recordStart : first index of record per page that display in each page
 	 * recordStop : last index of record per page that display in each page
 	 */
-	private int currentPage;
-	private int recordPerPage;
-	private int recordStart;
-	private int recordStop;
-	
-	/**
-	 * Constructor 
-	 * @param article : store all article object 
-	 * @param recordPerPage : number of record per page
-	 */
-	public Pagination(ArrayList<Article> article, int recordPerPage) {
-		setCurrentPage(1);
-		setRecordPerPage(recordPerPage); 
-		numberRecord(getCurrentPage(), article);
-	}
+	static int currentPage = 1;
+	static int recordPerPage = 5;
+	static int recordStart;
+	static int recordStop;
 	
 	/**
 	 * the main display use to display the record depending of the pagination 
 	 */
-	public void displayAllRecord(ArrayList<Article> tmp) {
-		numberRecord(getCurrentPage(), tmp);
+	public static void displayAllRecord(ArrayList<Article> tmp) {
+		numberRecord(currentPage, tmp);
 		Display.generateHeaderView();
 		IO.println(Article.showTitle(Run.columnPerPage));
-		for(int i=getRecordStart();i>getRecordStop();i--) 
+		for(int i=recordStart;i>recordStop;i--) 
 			IO.println(tmp.get(i).showRecord(Run.columnPerPage));
-		IO.println(Article.showPage("Page: " + getCurrentPage() + "/" + getTotalPage(tmp) , "Total Record: " + tmp.size()));
+		IO.println(Article.showPage("Page: " + currentPage + "/" + getTotalPage(tmp) , "Total Record: " + tmp.size()));
 	}
 	
 	/**
 	 * Use to set the number of record per page, start display record, stop display record, total record
 	 * @param pageNumber : is use to focus which page is the record are displaying
 	 */
-	public void numberRecord(int pageNumber, ArrayList<Article> tmp) {
-		setRecordPerPage(getRecordPerPage()); 
-		setCurrentPage(pageNumber); 
+	public static void numberRecord(int pageNumber, ArrayList<Article> tmp) {
+		currentPage = pageNumber; 
 		if(getRemainRecord(tmp) == 0) {
-			setRecordStart((getTotalPage(tmp)-getCurrentPage())*getRecordPerPage() -1 + getRecordPerPage());
-			setRecordStop(getRecordStart() - getRecordPerPage());
+			recordStart = (getTotalPage(tmp)-currentPage) * recordPerPage -1 + recordPerPage;
+			recordStop = recordStart - recordPerPage;
 		}
 		else {
-			if(getCurrentPage() == getTotalPage(tmp)) {
-				setRecordStart((getTotalPage(tmp)-getCurrentPage())*getRecordPerPage() -1 + getRemainRecord(tmp));
-				setRecordStop(getRecordStart() - getRemainRecord(tmp));
+			if(currentPage == getTotalPage(tmp)) {
+				recordStart = (getTotalPage(tmp)-currentPage) * recordPerPage -1 + getRemainRecord(tmp);
+				recordStop = recordStart - getRemainRecord(tmp);
 			}
 			else {
-				setRecordStart((getTotalPage(tmp)-getCurrentPage())*getRecordPerPage() - 1 + getRemainRecord(tmp));
-				setRecordStop(getRecordStart() - getRecordPerPage());
+				recordStart = (getTotalPage(tmp)-currentPage) * recordPerPage - 1 + getRemainRecord(tmp);
+				recordStop = recordStart - recordPerPage;
 			}
 		}
 	}
@@ -70,140 +56,75 @@ public class Pagination {
 	 * @param arr : the array contain all the record
 	 * @param pageNumber : the recent page number
 	 */
-	public void numberRecord(ArrayList<Article> tmp, int pageNumber) {
-		setRecordPerPage(5); 
-		setCurrentPage(pageNumber); 
-		if(getCurrentPage() == getTotalPage(tmp)) {
-			setRecordStart((getTotalPage(tmp)-getCurrentPage())*getRecordPerPage() - 1 + getRemainRecord(tmp));
-			setRecordStop(getRecordStart() - getRemainRecord(tmp));
+	public static void numberRecord(ArrayList<Article> tmp, int pageNumber) {
+		recordPerPage = 5; 
+		currentPage = pageNumber; 
+		if(currentPage == getTotalPage(tmp)) {
+			recordStart = (getTotalPage(tmp) - currentPage) * recordPerPage - 1 + getRemainRecord(tmp);
+			recordStop = recordStart - getRemainRecord(tmp);
 		}
 		else {
-			setRecordStart((getTotalPage(tmp)-getCurrentPage())*getRecordPerPage() - 1 + getRemainRecord(tmp));
-			setRecordStop(getRecordStart() - getRecordPerPage());
+			recordStart = (getTotalPage(tmp) - currentPage) * recordPerPage - 1 + getRemainRecord(tmp);
+			recordStop = recordStart - recordPerPage;
 		}
 	}
 	
 	/**
 	 * use to move the record to the next page
 	 */
-	public void moveNext(ArrayList<Article> tmp) {
-		if(getCurrentPage() == (getTotalPage(tmp) - 1) || getCurrentPage() == getTotalPage(tmp)) 
+	public static void moveNext(ArrayList<Article> tmp) {
+		if(currentPage == (getTotalPage(tmp) - 1) || currentPage == getTotalPage(tmp)) 
 			moveLast(tmp);
 		else {
-			setCurrentPage(getCurrentPage()+1); 
-			numberRecord(getCurrentPage(), tmp);
+			currentPage += 1; 
+			numberRecord(currentPage, tmp);
 		}
 	}
 	
 	/**
 	 * use to move the record to the previous page
 	 */
-	public void movePrevious(ArrayList<Article> tmp) {
-		if(getCurrentPage() == 1) 
+	public static void movePrevious(ArrayList<Article> tmp) {
+		if(currentPage == 1) 
 			moveFirst(tmp);
 		else 
-			numberRecord(getCurrentPage() - 1, tmp);
+			numberRecord(currentPage - 1, tmp);
 	}
 	
 	/**
 	 * use to move the record to the first page
 	 */
-	public void moveFirst(ArrayList<Article> tmp) {
-		setCurrentPage(1);
-		numberRecord(getCurrentPage(), tmp);
+	public static void moveFirst(ArrayList<Article> tmp) {
+		currentPage = 1;
+		numberRecord(currentPage, tmp);
 	}
 	
 	/**
 	 * use to move the record to the last page
 	 */
-	public void moveLast(ArrayList<Article> tmp) {
+	public static void moveLast(ArrayList<Article> tmp) {
 		numberRecord(getTotalPage(tmp), tmp);
 	}
 	
 	/**
 	 * @return total page number
 	 */
-	public int getTotalPage() {
+	public static int getTotalPage() {
 		return getTotalPage(Run.article);
 	}
 	
-	/*
+	/**
 	 * return total page depend on the array argument provided
 	 */
-	public int getTotalPage(ArrayList<Article> tmp) {
-		return (int)Math.ceil(tmp.size() / (double)getRecordPerPage());
+	public static int getTotalPage(ArrayList<Article> tmp) {
+		return (int)Math.ceil(tmp.size() / (double)recordPerPage);
 	}
 	
 	/**
-	 * 
 	 * @return the number of remain record 
 	 */
-	public int getRemainRecord(ArrayList<Article> tmp) {
-		return tmp.size() % getRecordPerPage();
-	}
-
-	/**
-	 * 
-	 * @return number of record per page
-	 */
-	public int getRecordPerPage() {
-		return recordPerPage;
-	}
-
-	/**
-	 * 
-	 * @param set number of record Per Page
-	 */
-	public void setRecordPerPage(int recordPerPage) {
-		this.recordPerPage = recordPerPage;
-	}
-
-	/**
-	 * 
-	 * @return current page that we are on
-	 */
-	public int getCurrentPage() {
-		return currentPage;
-	}
-
-	/**
-	 * 
-	 * @param current Page to display
-	 */
-	public void setCurrentPage(int currentPage) {
-		this.currentPage = currentPage;
-	}
-
-	/**
-	 * 
-	 * @return start record that display in a page
-	 */
-	public int getRecordStart() {
-		return recordStart;
-	}
-
-	/**
-	 * 
-	 * @param recordStart : index of record start
-	 */
-	public void setRecordStart(int recordStart) {
-		this.recordStart = recordStart;
-	}
-
-	/**
-	 * 
-	 * @return end index of record that finish in display
-	 */
-	public int getRecordStop() {
-		return recordStop;
-	}
-
-	/**
-	 * 
-	 * @param recordStop : index of record stop
-	 */
-	public void setRecordStop(int recordStop) {
-		this.recordStop = recordStop;
+	public static int getRemainRecord(ArrayList<Article> tmp) {
+		return tmp.size() % recordPerPage;
 	}
 	
 }

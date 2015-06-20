@@ -1,9 +1,7 @@
 package kshrd.raw;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Scanner;
+import java.text.*;
+import java.util.*;
 
 public class IO {
 	
@@ -110,7 +108,5 @@ public class IO {
 		Date date = new Date();
 		return dateFormat.format(date).toString();
 	}
-	
-	
 	
 }
