@@ -21,49 +21,50 @@ public class Pagination {
 	public Pagination(ArrayList<Article> article, int recordPerPage) {
 		setCurrentPage(1);
 		setRecordPerPage(recordPerPage); 
-		numberRecord(getCurrentPage());
+		numberRecord(getCurrentPage(), article);
 	}
 	
 	/**
 	 * Use for display the record depending of the argument as ArrayList<Article>
 	 * @param arr : the array that provide record for display
 	 */
-	public static void displayAllRecord(ArrayList<Article> arr, int col) {
-		IO.println(Article.showTitle(col));
-		for(int i=0;i<arr.size();i++) 
-			IO.println(arr.get(i).showRecord(col));
-		IO.println(Article.showPage("Page: 1/1", "Total Record: " + arr.size()));
-	}
+//	public static void displayAllRecord(ArrayList<Article> arr) {
+//		
+//		IO.println(Article.showTitle(Run.col));
+//		for(int i=0;i<arr.size();i++) 
+//			IO.println(arr.get(i).showRecord(Run.col));
+//		IO.println(Article.showPage("Page: 1/1", "Total Record: " + arr.size()));
+//	}
 	/**
 	 * the main display use to display the record depending of the pagination 
 	 */
-	public void displayAllRecord(int col) {
-		numberRecord(getCurrentPage());
+	public void displayAllRecord(ArrayList<Article> tmp) {
+		numberRecord(getCurrentPage(), tmp);
 		Display.generateHeaderView();
-		IO.println(Article.showTitle(col));
+		IO.println(Article.showTitle(Run.col));
 		for(int i=getRecordStart();i>getRecordStop();i--) 
-			IO.println(Run.article.get(i).showRecord(col));
-		IO.println(Article.showPage("Page: " + getCurrentPage() + "/" + getTotalPage() , "Total Record: " + Run.article.size()));
+			IO.println(tmp.get(i).showRecord(Run.col));
+		IO.println(Article.showPage("Page: " + getCurrentPage() + "/" + getTotalPage(tmp) , "Total Record: " + tmp.size()));
 	}
 	
 	/**
 	 * Use to set the number of record per page, start display record, stop display record, total record
 	 * @param pageNumber : is use to focus which page is the record are displaying
 	 */
-	public void numberRecord(int pageNumber) {
+	public void numberRecord(int pageNumber, ArrayList<Article> tmp) {
 		setRecordPerPage(getRecordPerPage()); 
 		setCurrentPage(pageNumber); 
-		if(getRemainRecord() == 0) {
-			setRecordStart((getTotalPage()-getCurrentPage())*getRecordPerPage() -1 + getRecordPerPage());
+		if(getRemainRecord(tmp) == 0) {
+			setRecordStart((getTotalPage(tmp)-getCurrentPage())*getRecordPerPage() -1 + getRecordPerPage());
 			setRecordStop(getRecordStart() - getRecordPerPage());
 		}
 		else {
-			if(getCurrentPage() == getTotalPage()) {
-				setRecordStart((getTotalPage()-getCurrentPage())*getRecordPerPage() -1 + getRemainRecord());
-				setRecordStop(getRecordStart() - getRemainRecord());
+			if(getCurrentPage() == getTotalPage(tmp)) {
+				setRecordStart((getTotalPage(tmp)-getCurrentPage())*getRecordPerPage() -1 + getRemainRecord(tmp));
+				setRecordStop(getRecordStart() - getRemainRecord(tmp));
 			}
 			else {
-				setRecordStart((getTotalPage()-getCurrentPage())*getRecordPerPage() - 1 + getRemainRecord());
+				setRecordStart((getTotalPage(tmp)-getCurrentPage())*getRecordPerPage() - 1 + getRemainRecord(tmp));
 				setRecordStop(getRecordStart() - getRecordPerPage());
 			}
 		}
@@ -74,15 +75,15 @@ public class Pagination {
 	 * @param arr : the array contain all the record
 	 * @param pageNumber : the recent page number
 	 */
-	public void numberRecord(ArrayList<Article> arr, int pageNumber) {
+	public void numberRecord(ArrayList<Article> tmp, int pageNumber) {
 		setRecordPerPage(5); 
 		setCurrentPage(pageNumber); 
-		if(getCurrentPage() == getTotalPage()) {
-			setRecordStart((getTotalPage(arr)-getCurrentPage())*getRecordPerPage() - 1 + getRemainRecord());
-			setRecordStop(getRecordStart() - getRemainRecord());
+		if(getCurrentPage() == getTotalPage(tmp)) {
+			setRecordStart((getTotalPage(tmp)-getCurrentPage())*getRecordPerPage() - 1 + getRemainRecord(tmp));
+			setRecordStop(getRecordStart() - getRemainRecord(tmp));
 		}
 		else {
-			setRecordStart((getTotalPage()-getCurrentPage())*getRecordPerPage() - 1 + getRemainRecord());
+			setRecordStart((getTotalPage(tmp)-getCurrentPage())*getRecordPerPage() - 1 + getRemainRecord(tmp));
 			setRecordStop(getRecordStart() - getRecordPerPage());
 		}
 	}
@@ -90,38 +91,38 @@ public class Pagination {
 	/**
 	 * use to move the record to the next page
 	 */
-	public void moveNext() {
-		if(getCurrentPage() == (getTotalPage() - 1) || getCurrentPage() == getTotalPage()) 
-			moveLast();
+	public void moveNext(ArrayList<Article> tmp) {
+		if(getCurrentPage() == (getTotalPage(tmp) - 1) || getCurrentPage() == getTotalPage(tmp)) 
+			moveLast(tmp);
 		else {
 			setCurrentPage(getCurrentPage()+1); 
-			numberRecord(getCurrentPage());
+			numberRecord(getCurrentPage(), tmp);
 		}
 	}
 	
 	/**
 	 * use to move the record to the previous page
 	 */
-	public void movePrevious() {
+	public void movePrevious(ArrayList<Article> tmp) {
 		if(getCurrentPage() == 1) 
-			moveFirst();
+			moveFirst(tmp);
 		else 
-			numberRecord(getCurrentPage() - 1);
+			numberRecord(getCurrentPage() - 1, tmp);
 	}
 	
 	/**
 	 * use to move the record to the first page
 	 */
-	public void moveFirst() {
+	public void moveFirst(ArrayList<Article> tmp) {
 		setCurrentPage(1);
-		numberRecord(getCurrentPage());
+		numberRecord(getCurrentPage(), tmp);
 	}
 	
 	/**
 	 * use to move the record to the last page
 	 */
-	public void moveLast() {
-		numberRecord(getTotalPage());
+	public void moveLast(ArrayList<Article> tmp) {
+		numberRecord(getTotalPage(tmp), tmp);
 	}
 	
 	/**
@@ -134,16 +135,16 @@ public class Pagination {
 	/*
 	 * return total page depend on the array argument provided
 	 */
-	public int getTotalPage(ArrayList<Article> arr) {
-		return (int)Math.ceil(arr.size() / (double)getRecordPerPage());
+	public int getTotalPage(ArrayList<Article> tmp) {
+		return (int)Math.ceil(tmp.size() / (double)getRecordPerPage());
 	}
 	
 	/**
 	 * 
 	 * @return the number of remain record 
 	 */
-	public int getRemainRecord() {
-		return Run.article.size() % getRecordPerPage();
+	public int getRemainRecord(ArrayList<Article> tmp) {
+		return tmp.size() % getRecordPerPage();
 	}
 
 	/**

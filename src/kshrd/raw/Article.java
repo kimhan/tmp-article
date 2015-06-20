@@ -2,8 +2,9 @@ package kshrd.raw;
 
 import java.io.Serializable;
 
+@SuppressWarnings("serial")
 public class Article implements Serializable, Comparable<Article> {
-	private int id;
+	private int id;  
 	private String title;
 	private String author;
 	private String date;
@@ -21,7 +22,7 @@ public class Article implements Serializable, Comparable<Article> {
 		setId(id);
 		setTitle(title);
 		setAuthor(author);
-		setDate(IO.date);
+		setDate(IO.getDate());
 	}
 	
 	public Article(int id, String title, String author, String content) {
@@ -35,49 +36,44 @@ public class Article implements Serializable, Comparable<Article> {
 	}
 	
 	public static String showTitle(int col) {
-		String array[] = null;
+		String array[] = new String[col];
 		switch(col) {
 			case 2:
-				array = new String[col];
 				array[0] = "ID";
 				array[1] = "TITLE";
 				break;
 			case 3:
-				array = new String[col];
 				array[0] = "ID";
 				array[1] = "TITLE";
 				array[2] = "AUTHOR";
 				break;
 			case 4:
-				array = new String[col];
 				array[0] = "ID";
 				array[1] = "TITLE";
 				array[2] = "AUTHOR";
 				array[3] = "DATE";
 				break;
+			
 		}
-		if((col%2)!=0)
+		if((col%2) != 0)
 			return Display.showEqual(98, "=") + "\n|" + Display.showTitle(col, array) + "\n" + Display.showEqual(98, "=");
 		else
 			return Display.showEqual(99, "=") + "\n|" + Display.showTitle(col, array) + "\n" + Display.showEqual(99, "=");
 	}
 	
 	public String showRecord(int col) {
-		String array[]=null;
+		String array[] = new String[col];
 		switch(col) {
 			case 2:
-				array = new String[col];
 				array[0] = getId() + "";
 				array[1] = getTitle();
 				break;
 			case 3:
-				array = new String[col];
 				array[0] = getId() + "";
 				array[1] = getTitle();
 				array[2] = getAuthor();
 				break;
 			case 4:
-				array = new String[col];
 				array[0] = getId() + "";
 				array[1] = getTitle();
 				array[2] = getAuthor();
@@ -123,10 +119,16 @@ public class Article implements Serializable, Comparable<Article> {
 	public String getDate() {
 		return date;
 	}
-
+	
 	public void setDate(String date) {
 		this.date = date;
 	}
+
+//	public void setDate() {
+//		DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
+//		Date date = new Date();
+//		this.date = dateFormat.format(date);
+//	}
 
 	public String getDetail() {
 		return detail;

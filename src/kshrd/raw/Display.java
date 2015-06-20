@@ -3,10 +3,6 @@ package kshrd.raw;
 
 public class Display {
 	static int numPrint = 94;
-	
-	public static void main(String[] args) {
-		new Display().showWelcome();
-	}
 
 	/**
 	 * use to display welcome screen
@@ -62,9 +58,9 @@ public class Display {
 		for(String tmp:array) {
 			data += showLimit(col, tmp);
 		}
-		if((100 % space)!=0)
+		if((100%space) !=0)
 			return data += "\n" + showEqual(98, "-");
-		else 
+		else
 			return data += "\n" + showEqual(99, "-");
 	}
 	
@@ -75,7 +71,7 @@ public class Display {
 	 * @return
 	 */
 	public static String showTitle(int length, String arr[]) {
-		int col = 100/length;
+		int col = 100 / length;
 		String data = "";
 		for(String tmp:arr) {
 			data += showLimit(col, displayCenter(col, tmp));//showLimit(col, tmp);

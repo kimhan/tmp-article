@@ -1,14 +1,15 @@
 package kshrd.miniproject;
 
-import java.util.ArrayList;
-import java.util.Scanner;
+import java.util.*;
 
 import kshrd.raw.Article;
 import kshrd.raw.Display;
 import kshrd.raw.IO;
 
 public class Manupulate {
-
+	
+	static ArrayList<Article> tmpSearch;
+	
 	/**
 	 * read a record from arraylist according to the read id
 	 * the id should be relevance to the one in the array
@@ -34,6 +35,7 @@ public class Manupulate {
 	 * write a record into a file
 	 * it also was add to the array also the file unless y is pressed 
 	 */
+	@SuppressWarnings("resource")
 	public static void performWrite() {
 		String title = IO.readString("Add Title: ");
 		String author = IO.readString("Add Author: ");
@@ -50,8 +52,10 @@ public class Manupulate {
 	 		if(content == null) content="";
 	 		sb.append(content+"\n");
 	    }  
-	    if(IO.readChar("want to save?[y/n]") == 'y')
+	    if(IO.readChar("want to save?[y/n]") == 'y') {
 	    	Run.article.add(new Article((Run.article.get(Run.article.size()-1).getId() + 1), title, author, content));
+	    	FileMethod.writeDataIntoFile(Run.article);
+	    }
 	}
 	
 	/**
@@ -104,19 +108,14 @@ public class Manupulate {
 	 * @param searchId: the value of id that need to search
 	 * @return	if id is found, it will return +, if not, it will return -
 	 */
-	public static int searchById(int key) {
-        int lo = 0;
-        int hi = Run.article.size() - 1;
-        while (lo <= hi) {
-            // Key is in a[lo..hi] or not present.
-            int mid = lo + (hi - lo) / 2;
-            if      (key < Run.article.get(mid).getId()) hi = mid - 1;
-            else if (key > Run.article.get(mid).getId()) lo = mid + 1;
-            else return mid;
-        }
-        return -1;
-    }
-
+	public static int searchById(int searchId) {
+		for(int i=0;i<Run.article.size();i++) { 
+			if(Run.article.get(i).getId() == searchId) {
+				return i;
+			}
+		}
+		return -1;
+	}
 
 	/**
 	 * check if an is is exist in the file or not
@@ -149,11 +148,11 @@ public class Manupulate {
 	 * search any exist and like
 	 * @param stringSearch : value that is need provided by user for searching
 	 */
+	@SuppressWarnings("static-access")
 	public static void mySearch(String stringSearch) {
 		ArrayList<Article> arr = searchByString(stringSearch); 
-		Run.pagination = new Pagination(arr, 5);
 		while(IO.start) {
-			Run.pagination.displayAllRecord(arr, 4);
+//			Run.pagination.displayAllRecord(arr);
 			Display.showMenu("<<< Menu >>>", "0:exit search", "| 1:Mover First | 2:Move Next | 3:Move Previous | 4:Move Last |");
 			int key = IO.readInt("Make your choice: ");
 			switch (key) {
@@ -180,9 +179,9 @@ public class Manupulate {
 	 * it means that if have found. if not no exist
 	 */
 	public static void search() {
-		ArrayList<Article> arr = new ArrayList<Article>();
+		tmpSearch = new ArrayList<Article>();
 		Article a;
-		boolean stop=false;
+		boolean fail = false;
 		String search = "";
 		switch(IO.readInt("1. Search by title, 2. by Author ", 1, 2)) {
 			case 1:
@@ -190,67 +189,69 @@ public class Manupulate {
 				for(int i=0;i<Run.article.size();i++) {
 					a = Run.article.get(i);
 					if(a.getTitle().equalsIgnoreCase(search))
-						arr.add(a);
+						tmpSearch.add(a);
 				}
-				if(arr.size() < 0) 
-					IO.println("Not found !!!");
+				if(tmpSearch.size() <= 0) 
+					fail = true;
 				break;
 			case 2:
 				search = IO.readString("Search Author: ");
 				for(int i=0;i<Run.article.size();i++) {
 					a = Run.article.get(i);
 					if(a.getAuthor().equalsIgnoreCase(search))
-						arr.add(a);
+						tmpSearch.add(a);
 				}
-				if(arr.size() < 0) 
-					IO.println("Not found !!!");
+				if(tmpSearch.size() <= 0) 
+					fail = true;
 				break;
 		}
-		while(stop) {
-			Run.article = arr;
-			Run.pagination.displayAllRecord(Run.column);
-			choice(stop);
+		
+		while(IO.start) {
+			Run.pagination.displayAllRecord(tmpSearch);
+			choice();
 		}
+		IO.start = true;
+		Run.myChoice();
+		choice();
 	}
 	
-	public static void choice(boolean stop) {
-		Display.showMenu("<<< Menu >>>", "1:Mover First | 2:Move Next | 3:Move Previous | 4:Move Last", "5:update | 6:delete | G:go to | p:set page | c: set Cols | 0: Back");
+	public static void choice() {
+		Display.showMenu("<<< Menu >>>", "1:Mover First | 2:Move Next | 3:Move Previous | 4:Move Last", "5:update | 6:delete | G:go to | R:set Row | C:set Column | 0:Back");
 		int key = IO.readChar("Make your choice: ");
 		switch (key) {
 		case '1':
-			Run.pagination.moveFirst();
+		Run.pagination.moveFirst(tmpSearch);
 			break;
 		case '2':
-			Run.pagination.moveNext();
+		Run.pagination.moveNext(tmpSearch);
 			break;
 		case '3':
-			Run.pagination.movePrevious();
+		Run.pagination.movePrevious(tmpSearch);
 			break;
 		case '4':
-			Run.pagination.moveLast(); 
+		Run.pagination.moveLast(tmpSearch); 
 			break;
 		case '5':
 			Manupulate.performUpdate(); 
-			Run.pagination.moveFirst();
+		Run.pagination.moveFirst(tmpSearch);
 			break;
 		case '6':
 			Manupulate.performDelete(); 
 			break;
 		case 'G': case 'g':
-			Run.pagination.numberRecord(IO.readInt("Go to page: ", 0, Run.pagination.getTotalPage()));
+		Run.pagination.numberRecord(IO.readInt("Go to page: ", 0,Run.pagination.getTotalPage()), tmpSearch);
 			break;
-		case 'p':
-			Run.pagination.setRecordPerPage(IO.readInt("Number of Record per page: "));
-			Run.pagination.moveFirst();
+		case 'r': case 'R':
+		Run.pagination.setRecordPerPage(IO.readInt("Number of Record per page: "));
+		Run.pagination.moveFirst(tmpSearch);
 			break;
-		case 'c':
-			Run.column = IO.readInt("Set Column: ",2,4);
+		case 'c': case 'C':
+			Run.col = IO.readInt("set Colum[2, 4]: ", 2, 4);
 			break;
 		case '0':
-			stop = true;
+			IO.start = false;
 			break;
 		}
-		
 	}
 	
 	/**

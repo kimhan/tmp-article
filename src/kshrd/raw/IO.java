@@ -1,5 +1,6 @@
 package kshrd.raw;
 
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Scanner;
@@ -7,7 +8,6 @@ import java.util.Scanner;
 public class IO {
 	
 	public static boolean start = true;
-	public static String date = new SimpleDateFormat("yyyy/MM/dd").format(new Date()).toString();
 
 	/**
 	 * use to display message in a line
@@ -92,9 +92,11 @@ public class IO {
 		}
 	}
 	
-//	public static void showData(int) {
-//
-//	}
+	public static String getDate() {
+		DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
+		Date date = new Date();
+		return dateFormat.format(date).toString();
+	}
 	
 	
 	

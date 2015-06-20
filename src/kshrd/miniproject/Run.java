@@ -1,7 +1,6 @@
 package kshrd.miniproject;
 
-import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
 
 import kshrd.raw.Article;
 import kshrd.raw.Display;
@@ -12,12 +11,8 @@ public class Run {
 	public static ArrayList<Article> article;
 	//private LinkedList<Article> bookTmp;
 	static Pagination pagination;
-	static int column;
+	static int col;
 	
-	public int getColumn() {
-		return column;
-	}
-
 	/**
 	 * main method
 	 * @param args
@@ -31,20 +26,16 @@ public class Run {
 	 */
 	Run() {
 		article = new ArrayList<Article>();
-		addToArticle(5002);
-//		IO.println("done");
-//		Run.article = FileMethod.fileToArrayList();
-//		try {
-//			FileMethod.in.close();
-//		} catch (IOException e) {
-//			e.printStackTrace();
-//		}
-//		System.out.println(FileMethod.readDataFromFile());
-//		System.out.println(Run.article.get(0).toString());
+		addToArticle(10002);
 		pagination = new Pagination(article, 5);
-		column = 4;
+		col = 4;
+//		Display.showWelcome();
+		myChoice();
+	}
+	
+	public static void myChoice() {
 		while(IO.start) {
-			pagination.displayAllRecord(column);
+			pagination.displayAllRecord(article);
 			choice();
 		}
 	}
@@ -64,21 +55,21 @@ public class Run {
 	 * case #: set number of record per page
 	 * case 0: exit the program
 	 */
-	public void choice() {
-		Display.showMenu("<<< Menu >>>", "1:Mover First | 2:Move Next | 3:Move Previous | 4:Move Last", "5:read | 6:write | 7:search | 8:update | 9:delete | G:go to | p:set page | c: set Cols | 0:exit");
+	public static void choice() {
+		Display.showMenu("<<< Menu >>>", "1:Mover First | 2:Move Next | 3:Move Previous | 4:Move Last", "5:read | 6:write | 7:search | 8:update | 9:delete | G:go to | R:set Row | C:set Column | 0:exit");
 		int key = IO.readChar("Make your choice: ");
 		switch (key) {
 		case '1':
-			getPagination().moveFirst();
+			pagination.moveFirst(article);
 			break;
 		case '2':
-			getPagination().moveNext();
+			pagination.moveNext(article);
 			break;
 		case '3':
-			getPagination().movePrevious();
+			pagination.movePrevious(article);
 			break;
 		case '4':
-			getPagination().moveLast(); 
+			pagination.moveLast(article); 
 			break;
 		case '5':
 			Manupulate.performRead();
@@ -91,20 +82,20 @@ public class Run {
 			break;
 		case '8':
 			Manupulate.performUpdate(); 
-			getPagination().moveFirst();
+			pagination.moveFirst(article);
 			break;
 		case '9':
 			Manupulate.performDelete(); 
 			break;
 		case 'G': case 'g':
-			getPagination().numberRecord(IO.readInt("Go to page: ", 0, getPagination().getTotalPage()));
+			pagination.numberRecord(IO.readInt("Go to page: ", 0, pagination.getTotalPage()), article);
 			break;
-		case 'p':
-			getPagination().setRecordPerPage(IO.readInt("Number of Record per page: "));
-			getPagination().moveFirst();
+		case 'r': case 'R':
+			pagination.setRecordPerPage(IO.readInt("Number of Record per page: "));
+			pagination.moveFirst(article);
 			break;
-		case 'c':
-			column = IO.readInt("Set Column: ",2,4);
+		case 'c': case 'C':
+			col = IO.readInt("set Colum[2, 4]: ", 2, 4);
 			break;
 		case '0':
 			IO.start = false;
@@ -116,36 +107,20 @@ public class Run {
 	/**
 	 * add article to the array
 	 * @param numberOfArticle : number of article contain in array
-	 * @throws IOException 
 	 */
 	public void addToArticle(int numberOfArticle) {
 //		ArrayList<Article> tmp = new ArrayList<Article>();
 //		for(int i=0;i<numberOfArticle;i++) {
-////			data += new Article(i+1).toString();
 //			tmp.add(new Article(i+1));
 ////			FileMethod.writeDataIntoFile(new Article(i+1).toString());
 //		}
 //		FileMethod.writeDataIntoFile(tmp);
 		Run.article = FileMethod.readDataFromFile();
-	}
-
-	// setter and getter
-	/**
-	 * 
-	 * @return	return pagination object
-	 */
-	public Pagination getPagination() {
-		return pagination;
+		System.out.println(Run.article.size()+"\n"+Run.article.get(0).toString());
 	}
 	
-	/**
-	 * 
-	 * @param pagination : pagination value
-	 */
-	public void setPagination(Pagination pagination) {
-		this.pagination = pagination;
+	public static void getDataFromFile() {
+		
 	}
-
-	// end of setter and getter
 	
 }
