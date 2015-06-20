@@ -28,7 +28,7 @@ public class IO {
 	/**
 	 * use to read String from keyboard
 	 * @param message : display message
-	 * @return
+	 * @return String value
 	 */
 	@SuppressWarnings("resource")
 	public static String readString(String message) {
@@ -39,12 +39,17 @@ public class IO {
 	/**
 	 * use to read integer from keyboard
 	 * @param message : display message
-	 * @return
+	 * @return integer value
 	 */
 	public static int readInt(String message) {
 		return Integer.parseInt(readString(message));
 	}
 	
+	/**
+	 * use to read long value from keyboard
+	 * @param message : display message
+	 * @return long value 
+	 */
 	public static long readLong(String message) { 
 		return Long.parseLong(message);
 	}
@@ -54,7 +59,7 @@ public class IO {
 	 * @param message : display message
 	 * @param min : min value
 	 * @param max : max value
-	 * @return
+	 * @return min<=integer value<=max
 	 */
 	public static int readInt(String message, int min, int max) {
 		int number=0;
@@ -67,16 +72,16 @@ public class IO {
 	/**
 	 * use to read double from keyboard
 	 * @param message : display message
-	 * @return
+	 * @return double value
 	 */
 	public static double readDouble(String message) {
 		return Double.parseDouble(readString(message));
 	}
 	
 	/**
-	 * use to read a charactor from keyboard
+	 * use to read a character from keyboard
 	 * @param message : display message
-	 * @return
+	 * @return character value
 	 */
 	public static char readChar(String message) {
 		return readString(message).charAt(0);
@@ -96,6 +101,10 @@ public class IO {
 		}
 	}
 	
+	/**
+	 * get current date from machine
+	 * @return	current date
+	 */
 	public static String getDate() {
 		DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
 		Date date = new Date();

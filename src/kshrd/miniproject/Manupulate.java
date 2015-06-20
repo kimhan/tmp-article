@@ -8,6 +8,9 @@ import kshrd.raw.IO;
 
 public class Manupulate {
 
+	/**
+	 * tmpSearch : use to store temporary record after searching
+	 */
 	static ArrayList<Article> tmpSearch;
 
 	/**
@@ -31,7 +34,7 @@ public class Manupulate {
 	}
 
 	/**
-	 * write a record into a file it also was add to the array also the file
+	 * write a record into a file it also was add to the array also
 	 * unless y is pressed
 	 */
 	@SuppressWarnings("resource")
@@ -40,31 +43,26 @@ public class Manupulate {
 		do {
 			String title = IO.readString("Add Title: ");
 			String author = IO.readString("Add Author: ");
-
 			StringBuffer sb = new StringBuffer();
 			System.out.println("Plz enter content : ");
-			System.out.println("*Note(Press Enter + '.' + Enter to Finish) "
-					+ " => ");
-
+			System.out.println("*Note(Press Enter + '.' + Enter to Finish) => ");
 			String content = "";
 			Scanner input = new Scanner(System.in);
 			while (true) {
 				content = input.nextLine();
-				if (content != null && content.trim().length() == 1
-						&& content.trim().charAt(0) == '.')
+				if (content != null && content.trim().length() == 1	&& content.trim().charAt(0) == '.')
 					break;
 				if (content == null)
 					content = "";
 				sb.append(content + "\n");
 			}
 			if (IO.readChar("want to save?[y/n]") == 'y') {
-				tmp = new Article((Run.article.get(Run.article.size() - 1)
-						.getId() + 1), title, author, content);
+				tmp = new Article((Run.article.get(Run.article.size() - 1).getId() + 1), title, author, content);
 				Run.article.add(tmp);
 				FileMethod.writeDataIntoFile(tmp);
-				FileMethod.writeDataIntoFile(Run.article);
 			}
-		} while (IO.readChar("Add one more record?[y/n]: ") == 'y');
+		} while (IO.readChar("Successfully added. Add one more record?[y/n]: ") == 'y');
+		IO.pressEnterContinue();
 	}
 
 	/**
@@ -110,6 +108,12 @@ public class Manupulate {
 		IO.pressEnterContinue();
 	}
 
+	/**
+	 * binary search number only
+	 * @param tmp : explore array for match
+	 * @param key : needed number for searching
+	 * @return	index of array that store the key
+	 */
 	public static int searchById(ArrayList<Article> tmp, int key) {
 		int position;
 		int lowerbound = 0;
@@ -131,9 +135,7 @@ public class Manupulate {
 
 	/**
 	 * search a record with a provided id
-	 * 
-	 * @param searchId
-	 *            : the value of id that need to search
+	 * @param searchId : the value of id that need to search
 	 * @return if id is found, it will return +, if not, it will return -
 	 */
 	public static int searchById(int searchId) {
@@ -147,9 +149,7 @@ public class Manupulate {
 
 	/**
 	 * check if an is is exist in the file or not
-	 * 
-	 * @param id
-	 *            : search id provided by user
+	 * @param id : search id provided by user
 	 * @return true: exist, false: not exist
 	 */
 	public static boolean isExist(int id) {
@@ -158,63 +158,13 @@ public class Manupulate {
 		return true;
 	}
 
-	public static ArrayList<Article> searchByString(String stringSearch) {
-		ArrayList<Article> arr = new ArrayList<Article>();
-		// String start = stringSearch.substring(0, stringSearch.length()/3);
-		// String contain = stringSearch.substring(start.length(),
-		// (stringSearch.length()/3) * 2);
-		// String end = stringSearch.substring(contain.length());
-		String compare = "";
-		Article a;
-		for (int i = 0; i < Run.article.size(); i++) {
-			a = Run.article.get(i);
-			compare = a.getTitle();
-			if (compare.equalsIgnoreCase(stringSearch))
-				arr.add(a);
-		}
-		return arr;
-	}
-
 	/**
-	 * search any exist and like
-	 * 
-	 * @param stringSearch
-	 *            : value that is need provided by user for searching
-	 */
-	@SuppressWarnings("static-access")
-	public static void mySearch(String stringSearch) {
-		ArrayList<Article> arr = searchByString(stringSearch);
-		while (IO.start) {
-			// Run.pagination.displayAllRecord(arr);
-			Display.showMenu("<<< Menu >>>", "0:exit search",
-					"| 1:Mover First | 2:Move Next | 3:Move Previous | 4:Move Last |");
-			int key = IO.readInt("Make your choice: ");
-			switch (key) {
-			case 1:
-
-				break;
-			case 2:
-
-				break;
-			case 3:
-
-				break;
-			case 4:
-
-				break;
-			case 0:
-				return;
-			}
-		}
-	}
-
-	/**
-	 * simple search or specific search only it means that if have found. if not
-	 * no exist
+	 * specific search : searched by title, search by author
+	 * other search : if contain
 	 */
 	public static void search() {
 		tmpSearch = new ArrayList<Article>();
-		switch (IO.readInt("1. Search by title\n2. by Author\n3. other", 1, 3)) {
+		switch (IO.readInt("1. Search by title\n2. by Author\n3. other\nplease your choice: ", 1, 3)) {
 			case 1:
 				searchSpecific(IO.readString("Search Title: "), tmpSearch, "title");
 				break;
@@ -238,6 +188,12 @@ public class Manupulate {
 		}
 	}
 	
+	/**
+	 * specific search item : search by title and search by author
+	 * @param search : specific search string
+	 * @param tmp : explore array for searching
+	 * @param criteria : specific criteria whether title or author
+	 */
 	public static void searchSpecific(String search, ArrayList<Article> tmp, String criteria) {
 		Article a;
 		String compare = "";
@@ -256,6 +212,11 @@ public class Manupulate {
 		}
 	}
 	
+	/**
+	 * search any field if contains including title, author, date, and content
+	 * @param search : search string
+	 * @param tmp : explore array for searching
+	 */
 	public static void searchLike(String search, ArrayList<Article> tmp) {
 		Article a;
 		for(int i=0;i<Run.article.size();i++) {
@@ -268,10 +229,25 @@ public class Manupulate {
 		}
 	}
 
+	/**
+	 * after search result
+	 * we can check all the record
+	 * we can do some operation like update and delete
+	 * 1. moveFirst
+	 * 2. moveNext
+	 * 3. movePrevious
+	 * 4. moveLast
+	 * 5. Update a record
+	 * 6. Delete a record
+	 * g. go to any page
+	 * r. set number of display row
+	 * c. set number of display column
+	 * o. back to main menu
+	 */
 	public static void choice() {
 		Display.showMenu("<<< Menu >>>",
 				"1:Mover First | 2:Move Next | 3:Move Previous | 4:Move Last",
-				"5:update | 6:delete | G:go to | R:set Row | C:set Column | 0:Back");
+				"5:update | 6:delete | G:go to | R:set Row | C:set Column | 0:Main Menu");
 		int key = IO.readChar("Make your choice: ");
 		switch (key) {
 		case '1':
@@ -306,7 +282,7 @@ public class Manupulate {
 			break;
 		case 'c':
 		case 'C':
-			Run.col = IO.readInt("set Colum[2, 4]: ", 2, 4);
+			Run.columnPerPage = IO.readInt("set Colum[2, 4]: ", 2, 4);
 			break;
 		case '0':
 			IO.start = false;
@@ -322,20 +298,6 @@ public class Manupulate {
 		IO.println("Search Result:");
 		for (int i = 0; i < arr.size(); i++)
 			IO.println(arr.get(i).toString());
-	}
-
-	/**
-	 * alter for searching 1> search by title 2> search by author
-	 */
-	public static void switchSearch() {
-		switch (IO.readInt("1. Search by title, 2. by Author ", 1, 2)) {
-		case 1:
-			mySearch(IO.readString("Search Title: "));
-			break;
-		case 2:
-			mySearch(IO.readString("Search Author: "));
-			break;
-		}
 	}
 
 	/**

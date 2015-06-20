@@ -8,10 +8,14 @@ import kshrd.raw.IO;
 
 public class Run {
 
+	/**
+	 * article : array store all record after reading from a file
+	 * pagination : display record in page according to number of record and max row per page
+	 * columnPerPage : display column per page
+	 */
 	public static ArrayList<Article> article;
-	//private LinkedList<Article> bookTmp;
 	static Pagination pagination;
-	static int col;
+	static int columnPerPage;
 	
 	/**
 	 * main method
@@ -23,17 +27,23 @@ public class Run {
 	
 	/**
 	 * constructor
+	 * initialize array list to store all record from file
+	 * initialize pagination for display all record depending on array and max row per page
+	 * initialize number of column
+	 * start switch case
 	 */
 	Run() {
 		article = new ArrayList<Article>();
 //		addToArticle(10002);
 		Run.article = FileMethod.readDataFromFile();
 		pagination = new Pagination(article, 5);
-		col = 4;
-//		Display.showWelcome();
+		columnPerPage = 4;
 		myChoice();
 	}
 	
+	/**
+	 * start switch case
+	 */
 	public static void myChoice() {
 		while(IO.start) {
 			pagination.displayAllRecord(article);
@@ -96,7 +106,7 @@ public class Run {
 			pagination.moveFirst(article);
 			break;
 		case 'c': case 'C':
-			col = IO.readInt("set Colum[2, 4]: ", 2, 4);
+			columnPerPage = IO.readInt("set Colum[2, 4]: ", 2, 4);
 			break;
 		case '0':
 			IO.start = false;
@@ -113,15 +123,9 @@ public class Run {
 		ArrayList<Article> tmp = new ArrayList<Article>();
 		for(int i=0;i<numberOfArticle;i++) {
 			tmp.add(new Article(i+1));
-//			FileMethod.writeDataIntoFile(new Article(i+1).toString());
 		}
 		FileMethod.writeDataIntoFile(tmp);
-		Run.article = FileMethod.readDataFromFile();
-		System.out.println(Run.article.size()+"\n"+Run.article.get(0).toString());
-	}
-	
-	public static void getDataFromFile() {
-		
+
 	}
 	
 }

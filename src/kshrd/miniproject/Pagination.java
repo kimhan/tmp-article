@@ -8,6 +8,12 @@ import kshrd.raw.IO;
 
 public class Pagination {
 	
+	/**
+	 * currentPage : current display page depending on number of page per row
+	 * recordPerPage : max number of record per page
+	 * recordStart : first index of record per page that display in each page
+	 * recordStop : last index of record per page that display in each page
+	 */
 	private int currentPage;
 	private int recordPerPage;
 	private int recordStart;
@@ -25,25 +31,14 @@ public class Pagination {
 	}
 	
 	/**
-	 * Use for display the record depending of the argument as ArrayList<Article>
-	 * @param arr : the array that provide record for display
-	 */
-//	public static void displayAllRecord(ArrayList<Article> arr) {
-//		
-//		IO.println(Article.showTitle(Run.col));
-//		for(int i=0;i<arr.size();i++) 
-//			IO.println(arr.get(i).showRecord(Run.col));
-//		IO.println(Article.showPage("Page: 1/1", "Total Record: " + arr.size()));
-//	}
-	/**
 	 * the main display use to display the record depending of the pagination 
 	 */
 	public void displayAllRecord(ArrayList<Article> tmp) {
 		numberRecord(getCurrentPage(), tmp);
 		Display.generateHeaderView();
-		IO.println(Article.showTitle(Run.col));
+		IO.println(Article.showTitle(Run.columnPerPage));
 		for(int i=getRecordStart();i>getRecordStop();i--) 
-			IO.println(tmp.get(i).showRecord(Run.col));
+			IO.println(tmp.get(i).showRecord(Run.columnPerPage));
 		IO.println(Article.showPage("Page: " + getCurrentPage() + "/" + getTotalPage(tmp) , "Total Record: " + tmp.size()));
 	}
 	

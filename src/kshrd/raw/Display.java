@@ -5,20 +5,6 @@ public class Display {
 	static int numPrint = 94;
 
 	/**
-	 * use to display welcome screen
-	 */
-	public static void showWelcome(){
-		System.out.println("");
-		System.out.println("             â–ˆâ–ˆâ•—    â–ˆâ–ˆâ•—â–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ•—â–ˆâ–ˆâ•—      â–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ•— â–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ•— â–ˆâ–ˆâ–ˆâ•—   â–ˆâ–ˆâ–ˆâ•—â–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ•—");
-		System.out.println("             â–ˆâ–ˆâ•‘    â–ˆâ–ˆâ•‘â–ˆâ–ˆâ•”â•�â•�â•�â•�â•�â–ˆâ–ˆâ•‘     â–ˆâ–ˆâ•”â•�â•�â•�â•�â•�â–ˆâ–ˆâ•”â•�â•�â•�â–ˆâ–ˆâ•—â–ˆâ–ˆâ–ˆâ–ˆâ•— â–ˆâ–ˆâ–ˆâ–ˆâ•‘â–ˆâ–ˆâ•”â•�â•�â•�â•�â•�");
-		System.out.println("             â–ˆâ–ˆâ•‘ â–ˆâ•— â–ˆâ–ˆâ•‘â–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ•—  â–ˆâ–ˆâ•‘     â–ˆâ–ˆâ•‘     â–ˆâ–ˆâ•‘   â–ˆâ–ˆâ•‘â–ˆâ–ˆâ•”â–ˆâ–ˆâ–ˆâ–ˆâ•”â–ˆâ–ˆâ•‘â–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ•—  ");
-		System.out.println("             â–ˆâ–ˆâ•‘â–ˆâ–ˆâ–ˆâ•—â–ˆâ–ˆâ•‘â–ˆâ–ˆâ•”â•�â•�â•�  â–ˆâ–ˆâ•‘     â–ˆâ–ˆâ•‘     â–ˆâ–ˆâ•‘   â–ˆâ–ˆâ•‘â–ˆâ–ˆâ•‘â•šâ–ˆâ–ˆâ•”â•�â–ˆâ–ˆâ•‘â–ˆâ–ˆâ•”â•�â•�â•�  ");
-		System.out.println("              â–ˆâ–ˆâ–ˆâ•”â–ˆâ–ˆâ–ˆâ•”â•�â–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ•—â–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ•—â•šâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ•—â•šâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ•”â•�â–ˆâ–ˆâ•‘ â•šâ•�â•� â–ˆâ–ˆâ•‘â–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ•—");
-		System.out.println("              â•šâ•�â•�â•�â•šâ•�â•�â•� â•šâ•�â•�â•�â•�â•�â•�â•�â•šâ•�â•�â•�â•�â•�â•�â•� â•šâ•�â•�â•�â•�â•�â•� â•šâ•�â•�â•�â•�â•�â•� â•šâ•�â•�     â•šâ•�â•�â•šâ•�â•�â•�â•�â•�â•�â•�");
-		System.out.println("");
-	}
-	
-	/**
 	 * display header view
 	 */
 	public static void generateHeaderView () {
@@ -50,7 +36,7 @@ public class Display {
 	 * use to display the information of the record depending on argument like number of column and array string
 	 * @param space : number of column
 	 * @param array : array of string
-	 * @return
+	 * @return information record
 	 */
 	public static String showInformation(int space, String array[]) {
 		int col = 100/space;
@@ -68,7 +54,7 @@ public class Display {
 	 * use to display title of record depending of number of column and array string
 	 * @param length : number of column
 	 * @param arr : array string
-	 * @return
+	 * @return title
 	 */
 	public static String showTitle(int length, String arr[]) {
 		int col = 100 / length;
@@ -83,7 +69,7 @@ public class Display {
 	 * show any charactor in a row depending on argument length of display and charactor to display
 	 * @param equal : length to display
 	 * @param s : display charactor
-	 * @return
+	 * @return =
 	 */
 	public static String showEqual(int equal, String s) {
 		return "+" + showEqual(s, equal) + "+";
@@ -93,7 +79,7 @@ public class Display {
 	 * show any charactor in a row depending on argument length of display and charactor to display
 	 * @param s : display charactor
 	 * @param equal : length to display
-	 * @return
+	 * @return = depend on length
 	 */
 	public static String showEqual(String s, int equal) {
 		String data = "";
@@ -115,7 +101,7 @@ public class Display {
 	 * use to display text in center align
 	 * @param length : display length
 	 * @param message : display message
-	 * @return
+	 * @return center message
 	 */
 	public static String displayCenter(int length, String message) {
 		return whiteSpace(spaceLength(length, message.length())-2) + message + whiteSpace(spaceLength(length, message.length())-2);
@@ -125,7 +111,7 @@ public class Display {
 	 * use to display message with limit width
 	 * @param limit : limit length
 	 * @param data : message
-	 * @return
+	 * @return string limited
 	 */
 	public static String showLimit(int limit, String data) {
 		if(data.length() > limit) 
@@ -152,16 +138,16 @@ public class Display {
 	 * use to display space
 	 * @param lengthMax : width for display
 	 * @param lengthMin : width message
-	 * @return
+	 * @return number of space
 	 */
 	public static int spaceLength(int lengthMax, int lengthMin) {
 		return (lengthMax - lengthMin) / 2;
 	}
 	
 	/**
-	 * use to display whitespaec
+	 * use to display white spaec
 	 * @param spaceAmount : length of whitespace
-	 * @return
+	 * @return display space depend on length
 	 */
 	public static String whiteSpace(int spaceAmount) {
 		String space = "";
@@ -170,6 +156,12 @@ public class Display {
 		}
 		return space;
 	}
+	
+	/**
+	 * display underscore
+	 * @param underScoreAmount : number of display underscore
+	 * @return display length of underscore
+	 */
 	public static String underScore(int underScoreAmount) {
 		String space = "";
 		for(int i=0;i<underScoreAmount;i++) {
