@@ -36,7 +36,7 @@ public class FileMethod {
 	public static void readDataFromFile() {
 		try {
 			in = new ObjectInputStream(new FileInputStream(fileName));
-			Run.article = (ArrayList<Article>)in.readObject();
+			Run.article.addAll((ArrayList<Article>)in.readObject());
 			in.close();
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
@@ -69,7 +69,7 @@ public class FileMethod {
 		try {
 			out = new ObjectOutputStream(new FileOutputStream(fileName, true));
 			out.writeObject(tmp);
-			out.close();
+//			out.close();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

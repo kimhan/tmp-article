@@ -1,5 +1,6 @@
 package kshrd.miniproject;
 
+import java.io.IOException;
 import java.util.*;
 
 import kshrd.raw.*;
@@ -34,7 +35,7 @@ public class Run {
 		article = new ArrayList<Article>();
 		String []load = {"L", "O", "A", "D", "I", "N", "G"};
 		try {
-			addToArticle(100002);
+//			addToArticle(10000002);
 			FileMethod.readDataFromFile();
 			IO.print(Display.whiteSpace(45) + "+ ");
 			for(int i=0;i<load.length;i++) {
@@ -131,11 +132,12 @@ public class Run {
 	 * @param numberOfArticle : number of article contain in array
 	 */
 	public void addToArticle(int numberOfArticle) {
-		ArrayList<Article> tmp = new ArrayList<Article>();
+		Article a = new Article();
 		for(int i=0;i<numberOfArticle;i++) {
-			tmp.add(tmp.size(), new Article(i+1));
+			a.setId(i+1);
+			article.add(article.size(), a);
 		}
-		FileMethod.writeDataIntoFile(tmp);
+		FileMethod.writeDataIntoFile(article);
 	}
 	
 }

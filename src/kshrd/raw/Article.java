@@ -40,10 +40,14 @@ public class Article implements Serializable, Comparable<Article> {
 	 * @param author
 	 */
 	public Article(long id,String title, String author) {
-		setId(id);
-		setTitle(title);
-		setAuthor(author);
-		setDate(IO.getDate());
+		this.id = id;
+		this.title = title;
+		this.author = author;
+		this.date = IO.getDate();
+//		setId(id);
+//		setTitle(title);
+//		setAuthor(author);
+//		setDate(IO.getDate());
 	}
 	
 	/**
@@ -55,7 +59,8 @@ public class Article implements Serializable, Comparable<Article> {
 	 */
 	public Article(long id, String title, String author, String content) {
 		this(id,title,author);
-		setDetail(content); 
+		this.detail = content;
+//		setDetail(content); 
 	}
 	
 	/**
@@ -68,7 +73,7 @@ public class Article implements Serializable, Comparable<Article> {
 	 */
 	public Article(long id, String title, String author, String date, String content) {
 		this(id, title, author, content);
-		setDate(date);
+//		setDate(date);
 	}
 	
 	/**
